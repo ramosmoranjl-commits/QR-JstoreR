@@ -13,7 +13,6 @@
             --gold: #d4af37;
             --gold-light: #fcd34d;
             --obsidian: #0b0f19;
-            --panel: #161b22;
         }
         body {
             background-color: #050505;
@@ -42,9 +41,7 @@
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border-radius: 16px;
-            box-shadow: 
-                0 0 15px rgba(212, 175, 55, 0.1),
-                0 20px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1), 0 20px 40px rgba(0,0,0,0.6);
         }
         .card-scene.flipped .card-object {
             transform: rotateY(180deg) !important;
@@ -77,7 +74,7 @@
             opacity: 0.05;
             pointer-events: none;
         }
-        /* FRENTE */
+        /* --- FRENTE (SIN CAMBIOS) --- */
         .front {
             justify-content: center;
             align-items: center;
@@ -112,82 +109,112 @@
         .click-hint {
             position: absolute;
             bottom: 20px;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             color: var(--gold);
             opacity: 0.6;
             animation: pulse 2s infinite;
+            letter-spacing: 1px;
         }
-        /* REVERSO - AJUSTADO PARA ENCAJAR TODO */
+        /* --- REVERSO (REDSEÑADO) --- */
         .back {
             transform: rotateY(180deg);
-            padding: 20px; /* Reducido de 25px */
-            justify-content: space-between;
+            padding: 20px 25px; /* Más padding lateral */
         }
         .back-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 8px; /* Reducido */
-            margin-bottom: 5px;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
         }
-        
-        .contact-info { 
-            font-size: 0.8rem; /* Reducido ligeramente */
-            color: #ccc; 
-            margin-top: 5px;
+        /* Contenedor Central (Grid: Texto a la izq, Botones a la der) */
+        .middle-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
         }
-        .contact-item { 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            margin-bottom: 6px; /* Más compacto */
+        /* Columna Izquierda: Datos */
+        .info-col {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: #ccc;
         }
         .contact-item i { color: var(--gold); width: 15px; text-align: center; }
-        .qr-section { display: flex; gap: 12px; align-items: center; margin-top: 5px; }
-        .qr-img { 
-            width: 65px; /* Un poco más pequeño para dar espacio */
-            height: 65px; 
-            border-radius: 6px; 
-            border: 2px solid var(--gold); 
-            background: #d4af37; 
+        /* Columna Derecha: Botones */
+        .btn-col {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 120px; /* Ancho fijo para los botones */
         }
-        
-        .action-container {
-            display: flex; 
-            flex-direction: column; 
-            gap: 6px; 
-            flex: 1;
-        }
-        .action-btn {
+        .mini-btn {
             width: 100%;
-            padding: 8px; /* Botones más delgados */
-            background: var(--gold); 
-            color: #000; 
-            border: none; 
+            padding: 6px 10px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
             border-radius: 4px;
-            font-weight: 700; 
-            cursor: pointer; 
-            font-size: 0.75rem; 
-            transition: 0.3s;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 6px; 
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
             text-decoration: none;
-            box-sizing: border-box; /* Asegura que padding no rompa width */
+            text-align: center;
+            transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+            text-transform: uppercase;
         }
-        .action-btn:hover { background: white; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .mini-btn:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        .mini-btn.filled {
+            background: var(--gold);
+            color: #000;
+        }
+        .mini-btn.filled:hover {
+            background: #fff;
+        }
+        /* Pie de página: QR Centrado */
+        .qr-footer {
+            margin-top: auto; /* Empuja al fondo */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .qr-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 6px;
+            background: #fff;
+            padding: 3px; /* Borde blanco fino */
+        }
+        .scan-txt {
+            font-size: 0.55rem;
+            color: #666;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
         @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
-        
-        /* Ajuste Móvil */
+        /* MÓVIL */
         @media (max-width: 450px) {
-            .card-scene { width: 90vw; height: 54vw; } /* Proporción tarjeta */
+            .card-scene { width: 90vw; height: 54vw; }
             .brand-title { font-size: 1.5rem; }
             .logo-section img { width: 60px; }
-            .contact-info { font-size: 3vw; }
-            .qr-img { width: 15vw; height: 15vw; }
+            .contact-item { font-size: 2.8vw; }
+            .mini-btn { font-size: 2.5vw; padding: 1vw; width: 28vw; }
+            .qr-img { width: 16vw; height: 16vw; }
         }
     </style>
 </head>
@@ -211,27 +238,29 @@
                 
                 <div class="back-header">
                     <div>
-                        <div style="font-family: 'Cinzel'; color: var(--gold); font-weight:700; font-size: 1.1rem;">JstoreR Official</div>
-                        <div style="font-size:0.65rem; color:#666; letter-spacing: 1px;">VERIFIED MERCHANT</div>
+                        <div style="font-family: 'Cinzel'; color: var(--gold); font-weight:700; font-size: 1rem;">JstoreR Official</div>
+                        <div style="font-size:0.6rem; color:#666; letter-spacing: 1px;">VERIFIED MERCHANT</div>
                     </div>
-                    <img src="https://res.cloudinary.com/djpp4pwh8/image/upload/v1768128894/1001127115_kxjcfn.png" style="width:25px; opacity:0.5;">
+                    <img src="https://res.cloudinary.com/djpp4pwh8/image/upload/v1768128894/1001127115_kxjcfn.png" style="width:25px; opacity:0.6;">
                 </div>
-                <div class="contact-info">
-                    <div class="contact-item"><i class="fa-solid fa-location-dot"></i> Jr. Cuzco 626, Lima</div>
-                    <div class="contact-item"><i class="fa-brands fa-whatsapp"></i> +51 932 508 670</div>
-                    <div class="contact-item"><i class="fa-solid fa-globe"></i> tienda-jstore-r...vercel.app</div>
-                </div>
-                <div class="qr-section">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tienda-jstore-r-l2my.vercel.app/&color=000000&bgcolor=d4af37" class="qr-img">
-                    
-                    <div class="action-container">
-                        <button class="action-btn" onclick="event.stopPropagation(); downloadVCard()">
-                            <i class="fa-solid fa-user-plus"></i> Guardar Contacto
+                <div class="middle-content">
+                    <div class="info-col">
+                        <div class="contact-item"><i class="fa-solid fa-location-dot"></i> Jr. Cuzco 626, Lima</div>
+                        <div class="contact-item"><i class="fa-brands fa-whatsapp"></i> +51 932 508 670</div>
+                        <div class="contact-item"><i class="fa-solid fa-envelope"></i> ventas@jstorer.com</div>
+                    </div>
+                    <div class="btn-col">
+                        <button class="mini-btn filled" onclick="event.stopPropagation(); downloadVCard()">
+                            <i class="fa-solid fa-save"></i> Guardar
                         </button>
-                        <a href="https://tienda-jstore-r-l2my.vercel.app/" target="_blank" class="action-btn" style="background:#222; color:white; border:1px solid #444;" onclick="event.stopPropagation()">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Ir a la Tienda
+                        <a href="https://tienda-jstore-r-l2my.vercel.app/" target="_blank" class="mini-btn" onclick="event.stopPropagation()">
+                            <i class="fa-solid fa-globe"></i> Visitar
                         </a>
                     </div>
+                </div>
+                <div class="qr-footer">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tienda-jstore-r-l2my.vercel.app/&color=000000&bgcolor=ffffff" class="qr-img">
+                    <div class="scan-txt">Escanear para Comprar</div>
                 </div>
             </div>
         </div>
@@ -265,7 +294,6 @@
             }
         });
         function downloadVCard() {
-            // Actualizado con el nuevo dominio
             const vCardData = `BEGIN:VCARD
 VERSION:3.0
 N:Official;JstoreR;;;
