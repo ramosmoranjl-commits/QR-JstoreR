@@ -3,7 +3,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>JstoreR | Elite Digital Card</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,11 +23,11 @@
             align-items: center;
             justify-content: center;
             margin: 0;
-            perspective: 1500px; /* Profundidad 3D */
+            perspective: 1500px;
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow: hidden;
+            -webkit-tap-highlight-color: transparent; /* Fix para móviles */
         }
-        /* CONTENEDOR PRINCIPAL */
         .card-scene {
             width: 400px;
             height: 240px;
@@ -35,23 +35,27 @@
             cursor: pointer;
             z-index: 10;
         }
-        /* LA TARJETA 3D */
         .card-object {
             width: 100%;
             height: 100%;
             position: absolute;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Rebote suave al girar */
             border-radius: 16px;
             box-shadow: 
                 0 0 15px rgba(212, 175, 55, 0.1),
                 0 20px 40px rgba(0,0,0,0.6);
         }
-        /* CARAS DE LA TARJETA */
+        /* --- LA CORRECCIÓN MÁGICA --- */
+        /* Usamos !important para obligar al navegador a ignorar el JS cuando está volteada */
+        .card-scene.flipped .card-object {
+            transform: rotateY(180deg) !important;
+        }
         .face {
             position: absolute;
             inset: 0;
-            backface-visibility: hidden; /* Oculta la parte trasera */
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden; /* Fix Safari */
             border-radius: 16px;
             background: var(--obsidian);
             border: 1px solid rgba(212, 175, 55, 0.3);
@@ -59,24 +63,15 @@
             display: flex;
             flex-direction: column;
         }
-        /* EFECTO DE BRILLO HOLOGRÁFICO (GLARE) */
         .glare {
             position: absolute;
             inset: 0;
-            background: linear-gradient(
-                125deg, 
-                rgba(255,255,255,0) 0%, 
-                rgba(255,255,255,0.05) 40%, 
-                rgba(255,255,255,0.2) 50%, 
-                rgba(255,255,255,0.05) 60%, 
-                rgba(255,255,255,0) 100%
-            );
+            background: linear-gradient(125deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%);
             transform: translateX(-100%);
             transition: transform 0.1s;
             pointer-events: none;
             mix-blend-mode: overlay;
         }
-        /* TEXTURA DE RUIDO (PAPELES DE LUJO) */
         .noise {
             position: absolute;
             inset: 0;
@@ -84,7 +79,7 @@
             opacity: 0.05;
             pointer-events: none;
         }
-        /* --- FRENTE --- */
+        /* FRENTE */
         .front {
             justify-content: center;
             align-items: center;
@@ -124,7 +119,7 @@
             opacity: 0.6;
             animation: pulse 2s infinite;
         }
-        /* --- REVERSO --- */
+        /* REVERSO */
         .back {
             transform: rotateY(180deg);
             padding: 25px;
@@ -137,66 +132,28 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 10px;
         }
-        .contact-info {
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
+        .contact-info { font-size: 0.9rem; color: #ccc; }
+        .contact-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .contact-item i { color: var(--gold); width: 20px; text-align: center; }
-        .qr-section {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .qr-img {
-            width: 70px;
-            height: 70px;
-            border-radius: 8px;
-            border: 2px solid var(--gold);
-        }
+        .qr-section { display: flex; gap: 15px; align-items: center; }
+        .qr-img { width: 70px; height: 70px; border-radius: 8px; border: 2px solid var(--gold); background: #d4af37; }
         
         .action-btn {
-            flex: 1;
-            padding: 10px;
-            background: var(--gold);
-            color: #000;
-            border: none;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            text-decoration: none;
+            flex: 1; padding: 10px; background: var(--gold); color: #000; border: none; border-radius: 6px;
+            font-weight: 700; cursor: pointer; font-size: 0.8rem; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 5px; text-decoration: none;
         }
-        .action-btn:hover {
-            background: white;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5);
-        }
-        /* FLIPPED STATE */
-        .card-scene.flipped .card-object {
-            transform: rotateY(180deg);
-        }
-        /* ANIMACIONES */
+        .action-btn:hover { background: white; box-shadow: 0 0 15px rgba(255,255,255,0.5); }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
         @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
         
-        /* RESPONSIVE */
         @media (max-width: 450px) {
             .card-scene { width: 90vw; height: 55vw; }
         }
     </style>
 </head>
 <body>
-    <div class="card-scene" id="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-scene" id="card" onclick="toggleFlip()">
         <div class="card-object" id="cardObj">
             
             <div class="face front">
@@ -204,16 +161,14 @@
                 <div class="glare" id="glareFront"></div>
                 
                 <div class="logo-section">
-                    <img src="https://res.cloudinary.com/djpp4pwh8/image/upload/v1768128894/1001127115_kxjcfn.png" alt="JstoreR Logo">
+                    <img src="https://res.cloudinary.com/djpp4pwh8/image/upload/v1768128894/1001127115_kxjcfn.png" alt="Logo">
                 </div>
                 <div class="brand-title">JstoreR</div>
                 <div class="brand-subtitle">Premium Selection</div>
-                
-                <div class="click-hint"><i class="fa-solid fa-rotate"></i> CLICK PARA VOLTEAR</div>
+                <div class="click-hint"><i class="fa-solid fa-rotate"></i> TOCAR PARA GIRAR</div>
             </div>
             <div class="face back">
                 <div class="noise"></div>
-                <div class="glare" id="glareBack"></div>
                 
                 <div class="back-header">
                     <div>
@@ -229,13 +184,12 @@
                 </div>
                 <div class="qr-section">
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://jstorer.netlify.app&color=000000&bgcolor=d4af37" class="qr-img">
-                    
                     <div style="display:flex; flex-direction:column; gap:5px; flex:1;">
                         <button class="action-btn" onclick="event.stopPropagation(); downloadVCard()">
-                            <i class="fa-solid fa-user-plus"></i> Guardar Contacto
+                            <i class="fa-solid fa-user-plus"></i> Guardar
                         </button>
                         <a href="https://jstorer.netlify.app" target="_blank" class="action-btn" style="background:#222; color:white; border:1px solid #444;" onclick="event.stopPropagation()">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Ir a la Tienda
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Visitar
                         </a>
                     </div>
                 </div>
@@ -243,42 +197,49 @@
         </div>
     </div>
     <script>
-        // LÓGICA DE FÍSICA 3D Y REFLEJOS
         const cardScene = document.getElementById('card');
         const cardObj = document.getElementById('cardObj');
         const glares = document.querySelectorAll('.glare');
-        // MOUSE MOVE EFFECT
-        document.addEventListener('mousemove', (e) => {
-            if(cardScene.classList.contains('flipped')) return; // Solo animar si no está volteada para lectura
+        // FUNCIÓN DE VOLTEO CORREGIDA
+        function toggleFlip() {
+            cardScene.classList.toggle('flipped');
             
+            // Si está volteada, limpiamos los estilos inline del 3D
+            // para que el CSS !important tome el control total
+            if(cardScene.classList.contains('flipped')) {
+                cardObj.style.transform = '';
+                glares.forEach(g => g.style.opacity = '0');
+            }
+        }
+        // FÍSICA 3D (Solo funciona si NO está volteada)
+        document.addEventListener('mousemove', (e) => {
+            if(cardScene.classList.contains('flipped')) return;
             const x = (window.innerWidth / 2 - e.pageX) / 25;
             const y = (window.innerHeight / 2 - e.pageY) / 25;
-            // Rotación suave limitada
             cardObj.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
             
-            // Efecto de brillo (Glare)
             glares.forEach(g => {
                 g.style.transform = `translateX(${x * 3}%) translateY(${y * 3}%)`;
                 g.style.opacity = '1';
             });
         });
-        // RESET AL SALIR EL MOUSE
         document.addEventListener('mouseleave', () => {
-            cardObj.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            glares.forEach(g => g.style.opacity = '0');
+            if(!cardScene.classList.contains('flipped')) {
+                cardObj.style.transform = `rotateY(0deg) rotateX(0deg)`;
+                glares.forEach(g => g.style.opacity = '0');
+            }
         });
-        // GENERADOR DE VCARD (AÑADIR A CONTACTOS)
+        // DESCARGAR CONTACTO
         function downloadVCard() {
-            // Datos del contacto
             const vCardData = `BEGIN:VCARD
 VERSION:3.0
 N:Official;JstoreR;;;
 FN:JstoreR Official
 ORG:JstoreR
-TITLE:Tienda Online Premium
+TITLE:Tienda Online
 TEL;TYPE=WORK,VOICE:+51932508670
 ADR;TYPE=WORK:;;Jr. Cuzco 626;Lima;;;Peru
-URL:https://jstorer.netlify.app
+URL:https://tienda-jstore-r-l2my.vercel.app/
 note:Importadores directos. Calidad y garantía.
 END:VCARD`;
             const blob = new Blob([vCardData], { type: 'text/vcard' });
@@ -291,14 +252,15 @@ END:VCARD`;
             document.body.removeChild(a);
         }
         
-        // GIROSCOPIO PARA MÓVILES (OPCIONAL)
-        if(window.DeviceOrientationEvent) {
+        // GIROSCOPIO MÓVIL (Con corrección de bloqueo)
+        if(window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission === 'function') {
+            // iOS requiere permiso, lo omitimos por ahora para no complicar UX
+        } else if(window.DeviceOrientationEvent) {
             window.addEventListener("deviceorientation", function(event) {
                 if(cardScene.classList.contains('flipped')) return;
-                const y = event.gamma; // Inclinación izquierda-derecha
-                const x = event.beta;  // Inclinación frente-atrás
+                const y = event.gamma; 
+                const x = event.beta;
                 if (x && y) {
-                    // Limitamos para que no gire loco
                     const rotX = Math.min(Math.max(x - 45, -20), 20); 
                     const rotY = Math.min(Math.max(y, -20), 20);
                     cardObj.style.transform = `rotateY(${rotY}deg) rotateX(${-rotX}deg)`;
